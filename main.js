@@ -52,4 +52,8 @@ $daySelect.addEventListener('input', updateEvents);
 function updateEvents() {
   var $eventTableRows = document.querySelectorAll('#event-table tbody > tr');
   if (!$eventTableRows) throw new Error('$eventTableRows query has failed');
+  for (var i = 0; i < data.events.length; i++) {
+    $eventTableRows[i].children[0].textContent = data.events[i].time;
+    $eventTableRows[i].children[1].textContent = data.events[i].details;
+  }
 }

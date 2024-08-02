@@ -28,6 +28,7 @@ td {
 
 #event-head-row th {
   background-color: white;
+  text-align: left;
 }
 
 #new-event-btn {
@@ -85,4 +86,8 @@ header {
 
 #time-select {
   margin-bottom: 10px;
+}
+
+button:hover {
+  cursor: pointer;
 }

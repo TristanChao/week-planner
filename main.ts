@@ -86,4 +86,9 @@ function updateEvents(): void {
     '#event-table tbody > tr',
   ) as NodeListOf<HTMLTableRowElement>;
   if (!$eventTableRows) throw new Error('$eventTableRows query has failed');
+
+  for (let i = 0; i < data.events.length; i++) {
+    $eventTableRows[i].children[0].textContent = data.events[i].time;
+    $eventTableRows[i].children[1].textContent = data.events[i].details;
+  }
 }
