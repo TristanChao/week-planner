@@ -39,7 +39,7 @@ interface DayEvent {
   time: string;
   amPm: string;
   details: string;
-  id: number;
+  id?: number;
 }
 
 interface EventData {
@@ -78,10 +78,22 @@ $newEventForm.addEventListener('submit', (event: Event) => {
     amPm: $amPm.value,
     day: $newEventDaySelect.value,
     details: $eventTextarea.value,
-    id: data.nextId,
   };
-  data.nextId++;
-  data.events.push(formValues);
+
+  if (data.editing === null) {
+    formValues.id = data.nextId;
+    data.nextId++;
+    data.events.push(formValues);
+  } else {
+    formValues.id = data.editing.id;
+    for (let i = 0; i < data.events.length; i++) {
+      if (data.events[i].id === formValues.id) {
+        data.events[i] = formValues;
+        break;
+      }
+    }
+    data.editing = null;
+  }
   writeData();
   $newEventDialog.close();
   updateEvents();
@@ -119,7 +131,7 @@ function updateEvents(): void {
       $eventTableRows[fillRow].children[1].textContent = data.events[i].details;
       $eventTableRows[fillRow].children[2].appendChild(renderActionButtons());
       $eventTableRows[fillRow].setAttribute(
-        'event-id',
+        'data-id',
         String(data.events[i].id),
       );
       fillRow++;
@@ -130,6 +142,7 @@ function updateEvents(): void {
 $cancelBtn.addEventListener('click', () => {
   $newEventDialog.close();
   $newEventForm.reset();
+  data.editing = null;
 });
 
 function renderActionButtons(): HTMLDivElement {
@@ -156,8 +169,21 @@ function renderActionButtons(): HTMLDivElement {
 
 $eventTable.addEventListener('click', (event: Event) => {
   const target = event.target as HTMLElement;
+
+  const $targetRow = target.closest('tr');
+
+  const targetId = Number($targetRow.getAttribute('data-id'));
+
+  const dataEvent = data.events.filter((element) => element.id === targetId)[0];
+
+  data.editing = dataEvent;
+
   if (target.className === 'edit-button') {
     $newEventDialog.showModal();
+    $timeSelect.value = dataEvent.time;
+    $amPm.value = dataEvent.amPm;
+    $newEventDaySelect.value = dataEvent.day;
+    $eventTextarea.value = dataEvent.details;
   }
   if (target.className === 'delete-button') {
     target.closest('tr').remove();

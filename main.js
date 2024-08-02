@@ -46,10 +46,21 @@ $newEventForm.addEventListener('submit', function (event) {
     amPm: $amPm.value,
     day: $newEventDaySelect.value,
     details: $eventTextarea.value,
-    id: data.nextId,
   };
-  data.nextId++;
-  data.events.push(formValues);
+  if (data.editing === null) {
+    formValues.id = data.nextId;
+    data.nextId++;
+    data.events.push(formValues);
+  } else {
+    formValues.id = data.editing.id;
+    for (var i = 0; i < data.events.length; i++) {
+      if (data.events[i].id === formValues.id) {
+        data.events[i] = formValues;
+        break;
+      }
+    }
+    data.editing = null;
+  }
   writeData();
   $newEventDialog.close();
   updateEvents();
@@ -79,7 +90,7 @@ function updateEvents() {
       $eventTableRows[fillRow].children[1].textContent = data.events[i].details;
       $eventTableRows[fillRow].children[2].appendChild(renderActionButtons());
       $eventTableRows[fillRow].setAttribute(
-        'event-id',
+        'data-id',
         String(data.events[i].id),
       );
       fillRow++;
@@ -89,6 +100,7 @@ function updateEvents() {
 $cancelBtn.addEventListener('click', function () {
   $newEventDialog.close();
   $newEventForm.reset();
+  data.editing = null;
 });
 function renderActionButtons() {
   var $buttonsDiv = document.createElement('div');
@@ -107,8 +119,18 @@ function renderActionButtons() {
 }
 $eventTable.addEventListener('click', function (event) {
   var target = event.target;
+  var $targetRow = target.closest('tr');
+  var targetId = Number($targetRow.getAttribute('data-id'));
+  var dataEvent = data.events.filter(function (element) {
+    return element.id === targetId;
+  })[0];
+  data.editing = dataEvent;
   if (target.className === 'edit-button') {
     $newEventDialog.showModal();
+    $timeSelect.value = dataEvent.time;
+    $amPm.value = dataEvent.amPm;
+    $newEventDaySelect.value = dataEvent.day;
+    $eventTextarea.value = dataEvent.details;
   }
   if (target.className === 'delete-button') {
     target.closest('tr').remove();
