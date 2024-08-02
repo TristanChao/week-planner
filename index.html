@@ -35,11 +35,11 @@
     <dialog id="new-event-dialog">
       <form id="new-event-form">
         <div>
-          <label for="time-select">Time of Event</label>
+          <label for="time-select">Time of Event:</label>
         </div>
         <div>
           <select id="time-select" name="time-select" required>
-            <option value="" disabled>Choose a Time</option>
+            <option value="" disabled>Choose a Time:</option>
             <option value="1">1:00</option>
             <option value="2">2:00</option>
             <option value="3">3:00</option>
@@ -59,7 +59,7 @@
           </select>
         </div>
         <div>
-          <label for="new-event-day-select">Day of Week</label>
+          <label for="new-event-day-select">Day of Week:</label>
         </div>
         <div>
           <select id="new-event-day-select" name="new-event-day" required>
@@ -79,16 +79,16 @@
         <div>
           <textarea required id="event-textarea"></textarea>
         </div>
-        <div>
-          <button type="button">Cancel</button>
-          <button type="submit">Confirm</button>
+        <div class="row space-around">
+          <button id="cancel-btn" type="button">Cancel</button>
+          <button id="confirm-btn" type="submit">Confirm</button>
         </div>
       </form>
     </dialog>
     <div class="justify-center row">
       <table id="event-table">
         <thead>
-          <tr id="event-head-row">
+          <tr>
             <th>Time</th>
             <th>Event</th>
             <th>Actions</th>

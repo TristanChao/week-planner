@@ -55,3 +55,34 @@ header {
   font-size: medium;
   margin-top: 10px;
 }
+
+#cancel-btn {
+  color: white;
+  border-color: transparent;
+  background-color: #6c757b;
+  border-radius: 5px;
+}
+
+#confirm-btn {
+  color: white;
+  background-color: #198755;
+  border-radius: 5px;
+  border-color: transparent;
+}
+
+.space-around {
+  justify-content: space-around;
+}
+
+#event-textarea {
+  height: 150px;
+  margin-bottom: 10px;
+}
+
+#new-event-day-select {
+  margin-bottom: 10px;
+}
+
+#time-select {
+  margin-bottom: 10px;
+}
