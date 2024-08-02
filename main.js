@@ -132,8 +132,13 @@ $eventTable.addEventListener('click', function (event) {
     $newEventDaySelect.value = dataEvent.day;
     $eventTextarea.value = dataEvent.details;
   }
-  if (target.className === 'delete-button') {
-    target.closest('tr').remove();
+  for (var i = 0; i < data.events.length; i++) {
+    if (data.events[i].id === targetId) {
+      data.events.splice(i, 1);
+      break;
+    }
   }
+  updateEvents();
+  writeData();
 });
 console.log('potato');
