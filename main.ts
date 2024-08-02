@@ -15,6 +15,8 @@ const $newEventDaySelect = document.querySelector(
 const $eventTextarea = document.querySelector(
   '#event-textarea',
 ) as HTMLTextAreaElement;
+const $daySelect = document.querySelector('#day-select') as HTMLSelectElement;
+const $eventTable = document.querySelector('#event-table') as HTMLTableElement;
 
 if (!$newEventBtn) throw new Error('$newEventBtn query has failed');
 if (!$newEventDialog) throw new Error('$newEventDialog query has failed');
@@ -23,6 +25,8 @@ if (!$timeSelect) throw new Error('$timeSelect query has failed');
 if (!$amPm) throw new Error('$amPm query has failed');
 if (!$newEventDaySelect) throw new Error('$newEventDaySelect query has failed');
 if (!$eventTextarea) throw new Error('$eventTextarea query has failed');
+if (!$daySelect) throw new Error('$daySelect query has failed');
+if (!$eventTable) throw new Error('$eventTable query has failed');
 
 $newEventBtn.addEventListener('click', () => {
   $newEventDialog.showModal();
@@ -38,9 +42,18 @@ interface DayEvent {
 interface EventData {
   editing: null | DayEvent;
   events: DayEvent[];
+  dayView: string;
 }
 
-const data: EventData = readData();
+let data: EventData = readData();
+
+if (!data) {
+  data = {
+    editing: null,
+    events: [],
+    dayView: 'Sun',
+  };
+}
 
 function writeData(): void {
   const dataJson = JSON.stringify(data);
@@ -63,4 +76,14 @@ $newEventForm.addEventListener('submit', (event: Event) => {
   };
   data.events.push(formValues);
   writeData();
+  $newEventDialog.close();
 });
+
+$daySelect.addEventListener('input', updateEvents);
+
+function updateEvents(): void {
+  const $eventTableRows = document.querySelectorAll(
+    '#event-table tbody > tr',
+  ) as NodeListOf<HTMLTableRowElement>;
+  if (!$eventTableRows) throw new Error('$eventTableRows query has failed');
+}
