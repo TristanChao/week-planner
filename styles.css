@@ -7,9 +7,27 @@
 }
 
 #event-table {
-  border: 2px solid indianred;
   margin-top: 20px;
   width: 70%;
+}
+
+#event-table,
+th,
+td {
+  border: 1px solid #ddd;
+  border-collapse: collapse;
+}
+
+#event-table tr {
+  height: 20px;
+}
+
+#event-table tr:nth-child(odd) {
+  background-color: rgb(232, 232, 232);
+}
+
+#event-head-row th {
+  background-color: white;
 }
 
 #new-event-btn {
