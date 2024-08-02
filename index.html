@@ -29,6 +29,62 @@
         <option value="Sat">Saturday</option>
       </select>
     </div>
+    <div class="row justify-center">
+      <button id="new-event-btn">Add New Event</button>
+    </div>
+    <dialog>
+      <form id="new-event-form">
+        <div>
+          <label for="time-select">Time of Event</label>
+        </div>
+        <div>
+          <select id="time-select" name="time-select" required>
+            <option value="" disabled>Choose a Time</option>
+            <option value="1">1:00</option>
+            <option value="2">2:00</option>
+            <option value="3">3:00</option>
+            <option value="4">4:00</option>
+            <option value="5">5:00</option>
+            <option value="6">6:00</option>
+            <option value="7">7:00</option>
+            <option value="8">8:00</option>
+            <option value="9">9:00</option>
+            <option value="10">10:00</option>
+            <option value="11">11:00</option>
+            <option value="12">12:00</option>
+          </select>
+          <select id="am-or-pm" required>
+            <option value="am">AM</option>
+            <option value="pm">PM</option>
+          </select>
+        </div>
+        <div>
+          <label for="new-event-day-select">Day of Week</label>
+        </div>
+        <div>
+          <select id="new-event-day-select" name="new-event-day" required>
+            <option value="" disabled>Choose a Day</option>
+            <option value="Sun">Sunday</option>
+            <option value="Mon">Monday</option>
+            <option value="Tues">Tuesday</option>
+            <option value="Wed">Wednesday</option>
+            <option value="Thurs">Thursday</option>
+            <option value="Fri">Friday</option>
+            <option value="Sat">Saturday</option>
+          </select>
+        </div>
+        <div>
+          <label for="event-textarea">Event Information</label>
+        </div>
+        <div>
+          <textarea required id="event-textarea"></textarea>
+        </div>
+        <div>
+          <button type="button">Cancel</button>
+          <button type="submit">Confirm</button>
+        </div>
+      </form>
+    </dialog>
     <div class="justify-center row">
       <table>
         <thead>
