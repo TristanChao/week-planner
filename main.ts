@@ -99,6 +99,24 @@ function updateEvents(): void {
   ) as NodeListOf<HTMLTableRowElement>;
   if (!$eventTableRows) throw new Error('$eventTableRows query has failed');
 
+  const $buttonsDiv = document.createElement('div');
+  $buttonsDiv.className = 'row space-around';
+
+  const $deleteButton = document.createElement('button');
+  const $editButton = document.createElement('button');
+
+  $deleteButton.className = 'delete-button';
+  $editButton.className = 'edit-button';
+
+  $deleteButton.textContent = 'DELETE';
+  $editButton.textContent = 'EDIT';
+
+  $deleteButton.setAttribute('type', 'button');
+  $editButton.setAttribute('type', 'button');
+
+  $buttonsDiv.appendChild($editButton);
+  $buttonsDiv.appendChild($deleteButton);
+
   for (let i = 0; i < $eventTableRows.length; i++) {
     $eventTableRows[i].children[0].textContent = '';
     $eventTableRows[i].children[1].textContent = '';
@@ -110,6 +128,7 @@ function updateEvents(): void {
     if (data.events[i].day === $daySelect.value) {
       $eventTableRows[fillRow].children[0].textContent = data.events[i].time;
       $eventTableRows[fillRow].children[1].textContent = data.events[i].details;
+      $eventTableRows[fillRow].children[2].appendChild($buttonsDiv);
       fillRow++;
     }
   }

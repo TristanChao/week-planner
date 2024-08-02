@@ -63,6 +63,18 @@ document.addEventListener('DOMContentLoaded', function () {
 function updateEvents() {
   var $eventTableRows = document.querySelectorAll('#event-table tbody > tr');
   if (!$eventTableRows) throw new Error('$eventTableRows query has failed');
+  var $buttonsDiv = document.createElement('div');
+  $buttonsDiv.className = 'row space-around';
+  var $deleteButton = document.createElement('button');
+  var $editButton = document.createElement('button');
+  $deleteButton.className = 'delete-button';
+  $editButton.className = 'edit-button';
+  $deleteButton.textContent = 'DELETE';
+  $editButton.textContent = 'EDIT';
+  $deleteButton.setAttribute('type', 'button');
+  $editButton.setAttribute('type', 'button');
+  $buttonsDiv.appendChild($editButton);
+  $buttonsDiv.appendChild($deleteButton);
   for (var i = 0; i < $eventTableRows.length; i++) {
     $eventTableRows[i].children[0].textContent = '';
     $eventTableRows[i].children[1].textContent = '';
@@ -73,6 +85,7 @@ function updateEvents() {
     if (data.events[i].day === $daySelect.value) {
       $eventTableRows[fillRow].children[0].textContent = data.events[i].time;
       $eventTableRows[fillRow].children[1].textContent = data.events[i].details;
+      $eventTableRows[fillRow].children[2].appendChild($buttonsDiv);
       fillRow++;
     }
   }
