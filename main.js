@@ -27,6 +27,7 @@ if (!data) {
     editing: null,
     events: [],
     dayView: 'Sun',
+    nextId: 1,
   };
 }
 function writeData() {
@@ -45,7 +46,9 @@ $newEventForm.addEventListener('submit', function (event) {
     amPm: $amPm.value,
     day: $newEventDaySelect.value,
     details: $eventTextarea.value,
+    id: data.nextId,
   };
+  data.nextId++;
   data.events.push(formValues);
   writeData();
   $newEventDialog.close();
@@ -63,6 +66,31 @@ document.addEventListener('DOMContentLoaded', function () {
 function updateEvents() {
   var $eventTableRows = document.querySelectorAll('#event-table tbody > tr');
   if (!$eventTableRows) throw new Error('$eventTableRows query has failed');
+  for (var i = 0; i < $eventTableRows.length; i++) {
+    $eventTableRows[i].children[0].textContent = '';
+    $eventTableRows[i].children[1].textContent = '';
+    $eventTableRows[i].children[2].textContent = '';
+  }
+  var fillRow = 0;
+  for (var i = 0; i < data.events.length; i++) {
+    if (data.events[i].day === $daySelect.value) {
+      $eventTableRows[fillRow].children[0].textContent =
+        data.events[i].time + ' ' + data.events[i].amPm;
+      $eventTableRows[fillRow].children[1].textContent = data.events[i].details;
+      $eventTableRows[fillRow].children[2].appendChild(renderActionButtons());
+      $eventTableRows[fillRow].setAttribute(
+        'event-id',
+        String(data.events[i].id),
+      );
+      fillRow++;
+    }
+  }
+}
+$cancelBtn.addEventListener('click', function () {
+  $newEventDialog.close();
+  $newEventForm.reset();
+});
+function renderActionButtons() {
   var $buttonsDiv = document.createElement('div');
   $buttonsDiv.className = 'row space-around';
   var $deleteButton = document.createElement('button');
@@ -75,22 +103,11 @@ function updateEvents() {
   $editButton.setAttribute('type', 'button');
   $buttonsDiv.appendChild($editButton);
   $buttonsDiv.appendChild($deleteButton);
-  for (var i = 0; i < $eventTableRows.length; i++) {
-    $eventTableRows[i].children[0].textContent = '';
-    $eventTableRows[i].children[1].textContent = '';
-    $eventTableRows[i].children[2].textContent = '';
-  }
-  for (var i = 0; i < data.events.length; i++) {
-    var fillRow = 0;
-    if (data.events[i].day === $daySelect.value) {
-      $eventTableRows[fillRow].children[0].textContent = data.events[i].time;
-      $eventTableRows[fillRow].children[1].textContent = data.events[i].details;
-      $eventTableRows[fillRow].children[2].appendChild($buttonsDiv);
-      fillRow++;
-    }
-  }
+  return $buttonsDiv;
 }
-$cancelBtn.addEventListener('click', function () {
-  $newEventDialog.close();
-  $newEventForm.reset();
+$eventTable.addEventListener('click', function (event) {
+  var target = event.target;
+  if (target.className === 'edit-button') {
+    $newEventDialog.showModal();
+  }
 });

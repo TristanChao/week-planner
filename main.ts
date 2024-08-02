@@ -39,12 +39,14 @@ interface DayEvent {
   time: string;
   amPm: string;
   details: string;
+  id: number;
 }
 
 interface EventData {
   editing: null | DayEvent;
   events: DayEvent[];
   dayView: string;
+  nextId: number;
 }
 
 let data: EventData = readData();
@@ -54,6 +56,7 @@ if (!data) {
     editing: null,
     events: [],
     dayView: 'Sun',
+    nextId: 1,
   };
 }
 
@@ -75,7 +78,9 @@ $newEventForm.addEventListener('submit', (event: Event) => {
     amPm: $amPm.value,
     day: $newEventDaySelect.value,
     details: $eventTextarea.value,
+    id: data.nextId,
   };
+  data.nextId++;
   data.events.push(formValues);
   writeData();
   $newEventDialog.close();
@@ -99,6 +104,35 @@ function updateEvents(): void {
   ) as NodeListOf<HTMLTableRowElement>;
   if (!$eventTableRows) throw new Error('$eventTableRows query has failed');
 
+  for (let i = 0; i < $eventTableRows.length; i++) {
+    $eventTableRows[i].children[0].textContent = '';
+    $eventTableRows[i].children[1].textContent = '';
+    $eventTableRows[i].children[2].textContent = '';
+  }
+
+  let fillRow = 0;
+
+  for (let i = 0; i < data.events.length; i++) {
+    if (data.events[i].day === $daySelect.value) {
+      $eventTableRows[fillRow].children[0].textContent =
+        data.events[i].time + ' ' + data.events[i].amPm;
+      $eventTableRows[fillRow].children[1].textContent = data.events[i].details;
+      $eventTableRows[fillRow].children[2].appendChild(renderActionButtons());
+      $eventTableRows[fillRow].setAttribute(
+        'event-id',
+        String(data.events[i].id),
+      );
+      fillRow++;
+    }
+  }
+}
+
+$cancelBtn.addEventListener('click', () => {
+  $newEventDialog.close();
+  $newEventForm.reset();
+});
+
+function renderActionButtons(): HTMLDivElement {
   const $buttonsDiv = document.createElement('div');
   $buttonsDiv.className = 'row space-around';
 
@@ -117,24 +151,12 @@ function updateEvents(): void {
   $buttonsDiv.appendChild($editButton);
   $buttonsDiv.appendChild($deleteButton);
 
-  for (let i = 0; i < $eventTableRows.length; i++) {
-    $eventTableRows[i].children[0].textContent = '';
-    $eventTableRows[i].children[1].textContent = '';
-    $eventTableRows[i].children[2].textContent = '';
-  }
-
-  for (let i = 0; i < data.events.length; i++) {
-    let fillRow = 0;
-    if (data.events[i].day === $daySelect.value) {
-      $eventTableRows[fillRow].children[0].textContent = data.events[i].time;
-      $eventTableRows[fillRow].children[1].textContent = data.events[i].details;
-      $eventTableRows[fillRow].children[2].appendChild($buttonsDiv);
-      fillRow++;
-    }
-  }
+  return $buttonsDiv;
 }
 
-$cancelBtn.addEventListener('click', () => {
-  $newEventDialog.close();
-  $newEventForm.reset();
+$eventTable.addEventListener('click', (event: Event) => {
+  const target = event.target as HTMLElement;
+  if (target.className === 'edit-button') {
+    $newEventDialog.showModal();
+  }
 });
