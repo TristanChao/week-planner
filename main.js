@@ -110,4 +110,8 @@ $eventTable.addEventListener('click', function (event) {
   if (target.className === 'edit-button') {
     $newEventDialog.showModal();
   }
+  if (target.className === 'delete-button') {
+    target.closest('tr').remove();
+  }
 });
+console.log('potato');
