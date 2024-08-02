@@ -17,6 +17,7 @@ const $eventTextarea = document.querySelector(
 ) as HTMLTextAreaElement;
 const $daySelect = document.querySelector('#day-select') as HTMLSelectElement;
 const $eventTable = document.querySelector('#event-table') as HTMLTableElement;
+const $cancelBtn = document.querySelector('#cancel-btn') as HTMLButtonElement;
 
 if (!$newEventBtn) throw new Error('$newEventBtn query has failed');
 if (!$newEventDialog) throw new Error('$newEventDialog query has failed');
@@ -27,6 +28,7 @@ if (!$newEventDaySelect) throw new Error('$newEventDaySelect query has failed');
 if (!$eventTextarea) throw new Error('$eventTextarea query has failed');
 if (!$daySelect) throw new Error('$daySelect query has failed');
 if (!$eventTable) throw new Error('$eventTable query has failed');
+if (!$cancelBtn) throw new Error('$cancelBtn query has failed');
 
 $newEventBtn.addEventListener('click', () => {
   $newEventDialog.showModal();
@@ -77,9 +79,19 @@ $newEventForm.addEventListener('submit', (event: Event) => {
   data.events.push(formValues);
   writeData();
   $newEventDialog.close();
+  updateEvents();
 });
 
-$daySelect.addEventListener('input', updateEvents);
+$daySelect.addEventListener('input', () => {
+  updateEvents();
+  data.dayView = $daySelect.value;
+  writeData();
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  $daySelect.value = data.dayView;
+  updateEvents();
+});
 
 function updateEvents(): void {
   const $eventTableRows = document.querySelectorAll(
@@ -87,8 +99,23 @@ function updateEvents(): void {
   ) as NodeListOf<HTMLTableRowElement>;
   if (!$eventTableRows) throw new Error('$eventTableRows query has failed');
 
+  for (let i = 0; i < $eventTableRows.length; i++) {
+    $eventTableRows[i].children[0].textContent = '';
+    $eventTableRows[i].children[1].textContent = '';
+    $eventTableRows[i].children[2].textContent = '';
+  }
+
   for (let i = 0; i < data.events.length; i++) {
-    $eventTableRows[i].children[0].textContent = data.events[i].time;
-    $eventTableRows[i].children[1].textContent = data.events[i].details;
+    let fillRow = 0;
+    if (data.events[i].day === $daySelect.value) {
+      $eventTableRows[fillRow].children[0].textContent = data.events[i].time;
+      $eventTableRows[fillRow].children[1].textContent = data.events[i].details;
+      fillRow++;
+    }
   }
 }
+
+$cancelBtn.addEventListener('click', () => {
+  $newEventDialog.close();
+  $newEventForm.reset();
+});
