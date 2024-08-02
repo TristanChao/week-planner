@@ -5,3 +5,35 @@
 .justify-center {
   justify-content: center;
 }
+
+#event-table {
+  border: 2px solid indianred;
+  margin-top: 20px;
+  width: 70%;
+}
+
+#new-event-btn {
+  color: whitesmoke;
+  background-color: #6c757b;
+  border-radius: 5px;
+  margin-top: 50px;
+  margin-bottom: 0;
+  border-color: transparent;
+  width: 120px;
+  height: 28px;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+header {
+  font-weight: 600;
+}
+
+#day-select {
+  height: 25px;
+  width: 120px;
+  font-size: medium;
+  margin-top: 10px;
+}
